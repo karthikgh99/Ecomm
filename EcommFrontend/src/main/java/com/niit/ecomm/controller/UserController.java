@@ -22,14 +22,17 @@ public class UserController
 	@Autowired
 	UserDAO userDAO;
 	
-	@RequestMapping("/user")
+	@RequestMapping("/signup")
 	public String showUser(Model m)
 	{
 		List<User> listUser=userDAO.listUser();
 		m.addAttribute("userlist",listUser);
-		m.addAttribute("u",new Category());
-		return "User";
+		m.addAttribute("u",new User());
+		m.addAttribute("signup",true);
+		return "home";
 	}
+	
+	
 	
 	@RequestMapping(value="/InsertUser",method=RequestMethod.POST)
 	public String insertUser(@ModelAttribute("u")User u,Model m)
@@ -40,12 +43,13 @@ public class UserController
 		//user.setUserphoneno(phoneno);
 		//user.setEmail(email);
 		//user.setPassword(password);
-		
-		userDAO.addUser(u);
+		u.setEnabled(true);
+		u.setRole("ROLE_USER");
+		System.out.println(userDAO.addUser(u));
 		
 		List<User> listUser=userDAO.listUser();
 		m.addAttribute("userlist",listUser);
-		return "User";
+		return "redirect:/login";
 	}
 	
 	@RequestMapping(value="/deleteUser/{Email}")
@@ -61,7 +65,7 @@ public class UserController
 		return "User";
 	}
 	
-	@RequestMapping(value="/editUser/{Email}")
+	@RequestMapping(value="/admin/editUser/{Email}")
 	public String updateUser(@PathVariable("Email")String email,Model m)
 	{
 		 

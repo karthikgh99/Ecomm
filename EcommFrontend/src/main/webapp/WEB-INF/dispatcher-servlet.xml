@@ -12,11 +12,12 @@
 	http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<mvc:annotation-driven />
+<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<context:component-scan
 		base-package="com.niit" />
 
-	<bean
+	<bean id="internalResourceViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/WEB-INF/views/</value>
@@ -25,5 +26,10 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
+	
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000"></property>
+</bean>
 
 </beans>

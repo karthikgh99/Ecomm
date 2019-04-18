@@ -1,5 +1,9 @@
 package com.niit.ecomm.controller;
 
+import java.io.BufferedOutputStream;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.niit.ecomm.dao.ProductDAO;
 import com.niit.ecomm.model.Category;
@@ -22,18 +27,20 @@ public class ProductController
 	@Autowired
 	ProductDAO productDAO;
 	
-	@RequestMapping("/product")
+	@RequestMapping("/admin/product")
 	public String showProduct(Model m)
 	{
 		List<Product> listProduct=productDAO.listProduct();
 		m.addAttribute("product",listProduct);
 		m.addAttribute("p",new Product());
-		return "Product";
+		m.addAttribute("productpage",true);
+		return "home";
 	}
 	
-	@RequestMapping(value="/InsertProduct",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/InsertProduct",method=RequestMethod.POST)
 	public String insertProduct(@ModelAttribute("p") Product p,Model m)
 	{
+	System.out.println("adding product");
 		//Product product=new Product();
 		/*
 		 * product.setProductname(productName); product.setProductdesc(productDesc);
@@ -52,25 +59,56 @@ public class ProductController
 		else
 		productDAO.addProduct(p);
 		
-		List<Product> listProduct=productDAO.listProduct();
-		m.addAttribute("product",listProduct);
-		return "Product";
+		int productId=p.getProductid();
+		
+		
+		String path="D:\\eclipseprojects\\EcommFrontend\\src\\main\\webapp\\resources\\images\\";
+		path=path+String.valueOf(productId)+".jpg";
+		File myImageFile=new File(path);
+		
+		if(!p.getImage().isEmpty())
+		{
+			try
+			{
+				byte buff[]=p.getImage().getBytes();
+				FileOutputStream fos=new FileOutputStream(myImageFile);
+				BufferedOutputStream bs=new BufferedOutputStream(fos);
+				System.out.println("image is saved");
+				bs.write(buff);
+				bs.close();
+			}
+			catch(Exception e)
+			{
+				m.addAttribute("Error", "Error Occured during Image Uploading::"+e.getMessage());
+			}
+		}
+		else
+		{
+			System.out.println("Error Occured While Uploading File");
+			m.addAttribute("Error", "Error Occured during Image Uploading");
+		}
+		
+		
+		//End of Adding Image
+		
+		
+	
+		
+		
+		return "redirect:/admin/product";
 	}
 	
-	@RequestMapping(value="/deleteProduct/{productId}")
+	@RequestMapping(value="/admin/deleteProduct/{productId}")
 	public String deleteProduct(@PathVariable("productId")int productId,Model m)
 	{
 		 
 		Product product=productDAO.getProduct(productId);
 		productDAO.deleteProduct(product);
-		
-		List<Product> listProduct=productDAO.listProduct();
-		m.addAttribute("product",listProduct);
-		
-		return "Product";
+	
+		return "redirect:/admin/product";
 	}
 	
-	@RequestMapping(value="/editProduct-{productId}")
+	@RequestMapping(value="admin/editProduct-{productId}")
 	public String updateProduct(@PathVariable("productId")int productId,Model m)
 	{
 		 

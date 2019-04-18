@@ -3,35 +3,50 @@
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "f"%>
 <html>
 <head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
 </head>
 <body>
 
-<c:url value="InsertCategory" var="addcat" />
-<f:form action="${addcat}" method="post" modelAttribute="cat">
-<table cellspacing="3" align="center">
-	<tr bgcolor="orange"><td colspan="2"><center>Enter Category Detail</center></td></tr>
-	<tr>
-	<td><f:hidden path="categoryId"  /></td>
-	</tr>
-	<tr>
-		<td>Category Name</td>
-		<td><f:input path="categoryName" type="text"  /></td>
-	</tr>
-	<tr>
-		<td>Category Desc</td>
-		<td><f:input path="categoryDesc" type="text" name="catDesc" id="catDesc"/></td>
-	</tr>
-	<tr>
-		<td colspan="2">
-		<center><input type="submit" value="Insert Category"/></center>
-		</td>
-	</tr>
-</table>
-</f:form>
 
-<table align="center" cellspacing="2" border="1">
+<div class="container-fluid">
+<c:url value="/admin/InsertCategory" var="addcat" />
+	<div class="row">
+		<div class="col-md-8">
+			<f:form role="form" action="${addcat}" method="post" modelAttribute="cat">
+			
+			<div class="form-group">
+    <f:hidden path="categoryId"  class="form-control" />
+  </div>
+			
+				<div class="form-group">
+					 <label >Category Name</label>
+					 <f:input path="categoryName" type="text"   class="form-control " />
+				</div>
+				
+				<div class="form-group">
+					<label >Category Desc</label>
+					<f:input path="categoryDesc" type="text"  class="form-control" />
+				</div>
+				
+				
+				<div class="col-md-4"></div>
+				<button type="submit" class="btn btn-primary">Insert Category</button>
+				
+			</f:form>
+		</div>
+		<div class="col-md-4">
+		</div>
+	</div>
+</div>
+
+
+<br/><br/>
+
+<table class="table" align="center" cellspacing="2" border="1">
 	<tr bgcolor="orange">
 		<td colspan="4"><center>Category Details</center></td>
 	</tr>
@@ -48,14 +63,14 @@
 		<td>${category.categoryDesc}</td>
 		<td>
 		
-			<a href="<c:url value="/editCategory-${category.categoryId}"/>" >Edit</a>
-			<a href="<c:url value="/deleteCategory-${category.categoryId}" />"> Delete</a>
+			<a href="<c:url value="/admin/editCategory/${category.categoryId}"/>" >Edit</a>
+			<a href="<c:url value="/admin/deleteCategory/${category.categoryId}" />"> Delete</a>
 		</td>
 	</tr>	
 	</c:forEach>
 	
 </table>
-
+</div>
 
 </body>
 </html>

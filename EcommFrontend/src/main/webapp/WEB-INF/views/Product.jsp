@@ -3,47 +3,66 @@
 <%@taglib uri = "http://www.springframework.org/tags/form" prefix = "f"%>
 <html>
 <head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
+
 </head>
 <body>
 
-<c:url value="InsertProduct" var="addproduct" />
-<f:form action="${addproduct}" method="post" modelAttribute="p">
-<table cellspacing="2" align="center">
-	<tr bgcolor="orange"><td colspan="2"><center>Enter Product Detail</center></td></tr>
-	<tr>
-	<td><f:hidden path="productid"  /></td>
-	</tr>
-	<tr>
-		<td>Product Name</td>
-		<td><f:input path="productname" type="text" name="proName" id="proName"/></td>
-	</tr>
-	<tr>
-		<td>Product Desc</td>
-		<td><f:input path="productdesc" type="text" name="proDesc" id="proDesc"/></td>
-	</tr>
+<div class="container">
+<c:url value="/admin/InsertProduct"  var="addproduct" />
+<div class="row">
+<div class="col-md-8">
+<f:form role="form" action="${addproduct}" enctype="multipart/form-data" method="post" modelAttribute="p">
+
+	<tr bgcolor="orange"><h3><td colspan="2"><b><center>Enter Product Details</center></b></h3></td></tr>
+	<div class="form-group">
+	<f:hidden path="productid" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label>Product Name</label>
+		<f:input path="productname" type="text" class="form-control " />
+	</div>
+	<div class="form-group">
+		<label>Product Desc</label>
+		<f:input path="productdesc" type="text" class="form-control"/>
+	</div>
+	<div class="form-group">
+	<label>Price</label>
+		<f:input path="productprice" type="text" class="form-control"/>
+	</div>
+	<div class="form-group">
+			<label>Product Image</label>
+			<f:input type="file" path="image"  class="form-control"/>
+	</div>
 	
-	<td>Price</td>
-		<td><f:input path="productprice" type="text" name="price" id="price"/></td>
-	</tr>
-	<tr>
-		<td colspan="2">
-		<center><input type="submit" value="Insert Product"/></center>
+		<div class="col-md-4"></div>
+		<button type="submit" class="btn btn-primary">Insert Product</button>
 		</td>
 	</tr>
-</table>
-</f:form>
 
-<table align="center" cellspacing="2" border="1">
+</f:form>
+</br>
+</div>
+		<div class="col-md-4">
+		</div>
+	</div>
+</div>
+
+<div class="container">
+<table class="table" align="center" cellspacing="2" border="1">
 	<tr bgcolor="orange">
-		<td colspan="5"><center>Product Details</center></td>
+		<td colspan="8"><center>Product Details</center></td>
 	</tr>
 	<tr bgcolor="cyan">
 		<td>Product ID</td>
 		<td>Product Name </td>
 		<td>Product Desc </td>
 		<td>Price </td>
+		<td>Image</td>
 		<td>Operations</td>
 	</tr>
 	<c:forEach items="${product}" var="product">
@@ -52,16 +71,16 @@
 		<td>${product.productname}</td>
 		<td>${product.productdesc}</td>
 		<td>${product.productprice}</td>
+		<td><img src="<c:url value="/resources/images/${product.productid}.jpg"  />" width="100 px" height="100 px" /></td>
 		<td>
 		
-			<a href="<c:url value="/editProduct-${product.productid}"/>" >Edit</a>
-			<a href="<c:url value="/deleteProduct/${product.productid}" />"> Delete</a>
+			<a href="<c:url value="/admin/editProduct-${product.productid}"/>" >Edit</a>
+			<a href="<c:url value="/admin/deleteProduct/${product.productid}" />"> Delete</a>
 		</td>
 	</tr>	
 	</c:forEach>
 	
 </table>
-
-
+</div>
 </body>
 </html>
