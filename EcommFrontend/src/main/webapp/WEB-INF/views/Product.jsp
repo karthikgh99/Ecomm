@@ -39,6 +39,19 @@
 			<f:input type="file" path="image"  class="form-control"/>
 	</div>
 	
+	<div class="form-group">
+	<label>Stock</label>
+		<f:input path="stock" type="text" class="form-control"/>
+	</div>
+	
+	<div><b>Select Catgory:</b> <f:select path="category.categoryId">	
+    <c:forEach items="${categories}" var="c">
+    <f:option value="${c.categoryId}">${c.categoryName}</f:option>
+	</c:forEach>
+	</f:select>
+	</div>
+	
+	
 		<div class="col-md-4"></div>
 		<button type="submit" class="btn btn-primary">Insert Product</button>
 		</td>
@@ -62,7 +75,9 @@
 		<td>Product Name </td>
 		<td>Product Desc </td>
 		<td>Price </td>
+		<td>Stock</td>
 		<td>Image</td>
+		<td>Category</td>
 		<td>Operations</td>
 	</tr>
 	<c:forEach items="${product}" var="product">
@@ -71,7 +86,10 @@
 		<td>${product.productname}</td>
 		<td>${product.productdesc}</td>
 		<td>${product.productprice}</td>
+		<td>${product.stock}</td>
+		
 		<td><img src="<c:url value="/resources/images/${product.productid}.jpg"  />" width="100 px" height="100 px" /></td>
+		<td>${product.category.categoryName} </td>
 		<td>
 		
 			<a href="<c:url value="/admin/editProduct-${product.productid}"/>" >Edit</a>

@@ -15,7 +15,8 @@
 		<div class="col-md-4">
 		<div>
 			<img alt="Bootstrap Image Preview" src="<c:url value="/resources/images/${p.productid}.jpg" />" width="250 px" height="250 px" style="display:block" />
-			<a href="<c:url value="/InsertCart/${p.productid}" />" ><button type="button" class="btn btn-success ">
+			<c:if test="${p.stock>0}">
+			<a href="<c:url value="/InsertCart/${p.productid}" />" ><button type="button" class="btn btn-primary ">
 				Add to cart
 			</button></a>
 			<a href="<c:url value="/payment/${p.productid}" />" >
@@ -23,6 +24,19 @@
 				Buy now
 			</button>
 			</a>
+			</c:if>
+			<c:if test="${p.stock<=0}">
+			
+			<button type="button" class="btn btn-danger " disabled>
+				Sorry,Out of Stock!!!
+			</button>
+			<br/><br/>
+			<a href="<c:url value="/home" />" >
+			<button type="button" class="btn btn-warning ">
+				Click here to continue shopping with other products 
+			</button>
+			</a>
+			</c:if>
 		</div>
 		</div>
 		<div class="col-md-8">
@@ -36,7 +50,9 @@
 				<dd>
 					Description: ${p.productdesc}
 				</dd>
-				
+				<dd>
+					Stock: ${p.stock}
+				</dd>
 			</dl>
 		</div>
 	</div>

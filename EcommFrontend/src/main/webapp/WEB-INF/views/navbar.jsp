@@ -20,25 +20,39 @@
 </head>  
 <body>  
   
-<nav class="navbar navbar-defualt-expand">  
-  <div class="container-fluid">  
+<nav  class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark">  
+  <div class="container">  
     <div class="navbar-header">  
       <a class="navbar-brand" href="<c:url value="/home" />"><img src="<c:url value="/resources/images/Capture2.png" />" width="150 px" height="90 px"/></a>  
     </div>  
     <div class="nav navbar-expand-lg">  
       <li class="active"><a href="<c:url value="/home" />">Home</a></li>  
-      <li><a href="<c:url value="/category" />" >Categories</a></li>  
+  
 
-      <c:if test="${pageContext.request.userPrincipal.name=='k@a'}">
+ <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="catlist">Categories
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        <c:forEach items="${catlist}" var="cat">
+          <li><a href="<c:url value="/filterproducts/${cat.categoryId}" />">${cat.categoryName}</a></li>
+          </c:forEach> 
+        </ul>
+      </li>
+
+      <c:if test="${pageContext.request.userPrincipal.name=='k@k'}">
       <li><a href="<c:url value="/admin" />" >Admin</a></li>  
       </c:if>
       <c:if test="${pageContext.request.userPrincipal.name!=null}">
-      <c:if test="${pageContext.request.userPrincipal.name!='k@a'}">
+      <c:if test="${pageContext.request.userPrincipal.name!='k@k'}">
       <li><a href="<c:url value="/cart" />">MyCart</a></li> 
       </c:if> 
+      
+      </c:if>
+      <c:if test="${pageContext.request.userPrincipal.name!=null}">
+      <li><a href="<c:url value="orders" />" ><span class="glyphicon glyphicon-user"></span> My orders</a></li>
       </c:if>
     </div>  
-    <ul class="nav navbar-nav navbar-right"> 
+    <ul class="nav navbar-nav navbar-expand-lg navbar-dark bg-dark navbar-right"> 
      <c:if test="${pageContext.request.userPrincipal.name!=null}">
     <li><a href="">Welcome, ${Username}</a></li>
     </c:if>

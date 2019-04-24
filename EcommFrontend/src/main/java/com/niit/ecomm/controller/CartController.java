@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.niit.ecomm.dao.CartDAO;
+import com.niit.ecomm.dao.CategoryDAO;
+import com.niit.ecomm.dao.OrderDetailsDAO;
 import com.niit.ecomm.dao.ProductDAO;
 import com.niit.ecomm.dao.UserDAO;
 import com.niit.ecomm.model.Cart;
 import com.niit.ecomm.model.Category;
+import com.niit.ecomm.model.OrderDetails;
 import com.niit.ecomm.model.Product;
 import com.niit.ecomm.model.User;
 
@@ -29,7 +32,10 @@ public class CartController {
 	ProductDAO productDAO;
 	@Autowired
 	UserDAO userDAO;
-	
+	@Autowired
+	CategoryDAO categoryDAO;
+	@Autowired
+	OrderDetailsDAO orderDetailsDAO;
 	
 	@RequestMapping(value="/InsertCart/{pid}")
 	public String insertCart(@PathVariable("pid") int pid,Model m,Principal p)
@@ -38,7 +44,7 @@ public class CartController {
 	//cart.setCartName(Name);
 		//cart.setCartDesc(cartDesc);
 	int flag=0;
-		
+	
 		List<Cart> listCart=cartDAO.listcart(p.getName());
 		for(Cart c:listCart)
 		{
@@ -55,7 +61,7 @@ public class CartController {
 			}
 				
 		}
-		if(flag==1)
+		if(flag==1&&cart.getQuantity()<=cart.getProduct().getStock())
 			cartDAO.update(cart.getCartId(), cart.getQuantity());
 		else
 		{
@@ -65,9 +71,10 @@ public class CartController {
 			cart.setQuantity(1);
 			cart.setUser(u);
 			cart.setTotalprice(product.getProductprice()*cart.getQuantity());
+			if(cart.getQuantity()<=product.getStock())
 			cartDAO.add(cart);
 		}
-		
+		m.addAttribute("catlist",categoryDAO.listCategories());
 		return "redirect:/cart";
 	}
 	
@@ -84,31 +91,48 @@ public class CartController {
 		}
 		m.addAttribute("GrantTotal",sum);
 		m.addAttribute("cartPage",true);
+		m.addAttribute("catlist",categoryDAO.listCategories());
 		return "home";
 	}
 	
 	@RequestMapping(value="/deleteCart/{cartId}")
 	public String deleteCart(@PathVariable("cartId")int cartId,Model m)
 	{
-		 
+		m.addAttribute("catlist",categoryDAO.listCategories());
 		Cart cart=cartDAO.getCart(cartId);
 		cartDAO.delete(cart);
 	
-		return "redirect:/Cart";
+		return "redirect:/cart";
 	}
 	
 	@RequestMapping(value="/cart/updatecart")
 	public String updateCart(@RequestParam("cartId")int cartId,@RequestParam("quantity") int quantity,Model m, Principal p)
 	{
-		System.out.println(cartId + " " + quantity);
-		cartDAO.update(cartId,quantity);
 		Cart cart=cartDAO.getCart(cartId);
+		System.out.println(cartId + " " + quantity);
+		if(quantity<=cart.getProduct().getStock());
+		cartDAO.update(cartId,quantity);
+		
 		//cartDAO.update(cart);
 		
 		List<Cart> listcart=cartDAO.listcart(p.getName());
 		m.addAttribute("Cart",listcart);
 		m.addAttribute("c",cart);
+		m.addAttribute("catlist",categoryDAO.listCategories());
 		return "redirect:/cart";
 	}
 	
+
+
+
+@RequestMapping("/orders")
+public String displayorderdetails(Model m,Principal p)
+{
+	List<OrderDetails> listorder=orderDetailsDAO.listOrders(p.getName());
+	m.addAttribute("orderlist",listorder);
+	
+	m.addAttribute("ordersPage",true);
+	
+	return "home";
+}
 }

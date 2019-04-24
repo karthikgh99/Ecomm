@@ -15,35 +15,37 @@
 <body>
 
 
-<form action="<c:url value="/cart/payment" />" method="post">
+<form action="<c:url value="/order" />" method="post">
 <table align="center" class="table table-bordered">
-	<tr bgcolor="orange"><td colspan="2">Payment  </td></tr>
+	<tr bgcolor="orange"><td colspan="2">Payment</td></tr>
 <tr>
 		<td>
 		<bgcolor="orange">Payment Mode </bgcolor></td>
 		<td>
-  		 <input type="radio" name="payment" >Credit Card
-		<input type="radio" name="payment" value="COD">Cash On Delivery
-		</td>
-	</tr>
-	
-	
-	<tr bgcolor="cyan">
+  		 <input type="radio" class="dropdown" name="payment" >Credit Card
+  		 <input type="radio" name="payment" value="COD">Cash On Delivery
+  		 <tr bgcolor="cyan">
 		<td>Credit Card</td>
+		
 		<td><input type="text" name="creditcard"/></td>
 	</tr>
 	
 	<tr>
 		<td>Expiry Date <input type="text" name="expiry"/></td>
 		<td>CVV <input type="text"  name="cvv"/></td>
-	</tr>ma
+	</tr>
 	
 	<tr bgcolor="cyan">
 		<td> Name on Card</td>
 		<td> <input type="text" name="cname"/></td>
 	</tr>
 	<tr>
-		<td colspan="2"><center><input type="submit" value="payment"/></center></td>
+</td>
+	</tr>
+	
+	
+	
+		<td colspan="2"><center><input type="submit" value="Pay"/></center></td>
 	</tr>
 	
 </table>

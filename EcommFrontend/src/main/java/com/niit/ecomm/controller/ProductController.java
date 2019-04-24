@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.niit.ecomm.dao.CategoryDAO;
 import com.niit.ecomm.dao.ProductDAO;
 import com.niit.ecomm.model.Category;
 import com.niit.ecomm.model.Product;
@@ -27,15 +28,21 @@ public class ProductController
 	@Autowired
 	ProductDAO productDAO;
 	
+	@Autowired
+	CategoryDAO categoryDAO;
+	
 	@RequestMapping("/admin/product")
 	public String showProduct(Model m)
 	{
 		List<Product> listProduct=productDAO.listProduct();
 		m.addAttribute("product",listProduct);
+		List<Category> listcategory=categoryDAO.listCategories();
+		m.addAttribute("categories",listcategory);
 		m.addAttribute("p",new Product());
 		m.addAttribute("productpage",true);
 		return "home";
 	}
+	
 	
 	@RequestMapping(value="/admin/InsertProduct",method=RequestMethod.POST)
 	public String insertProduct(@ModelAttribute("p") Product p,Model m)
@@ -56,8 +63,13 @@ public class ProductController
 			//p1.setProductdesc(p.getProductdesc());
 			productDAO.updateProduct(p);
 		}
-		else
+		else 
+		{
+			 int cid=p.getCategory().getCategoryId();
+		 Category cat=categoryDAO.getCategory(cid);
+		 p.setCategory(cat);
 		productDAO.addProduct(p);
+		}
 		
 		int productId=p.getProductid();
 		
@@ -118,9 +130,20 @@ public class ProductController
 		List<Product> listProduct=productDAO.listProduct();
 		m.addAttribute("product",listProduct);
 		m.addAttribute("p",product);
+		m.addAttribute("catlist",categoryDAO.listCategories());
 		return "Product";
 	}
 	
 	
+	@RequestMapping(value="/filterproducts/{categoryId}")
+	public String filterProduct(@PathVariable("categoryId")int categoryId,Model m)
+	{
+		 
+		List<Product> catproducts=productDAO.listcatproduct(categoryId);
+		m.addAttribute("plist",catproducts);
+		m.addAttribute("homepage",true);
+		m.addAttribute("catlist",categoryDAO.listCategories());
+		return "home";
+	}
 	
 }

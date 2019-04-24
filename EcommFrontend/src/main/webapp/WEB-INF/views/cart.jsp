@@ -10,6 +10,7 @@
 <body>
 
 <div class="container">
+<c:if test="${not empty cartlist}">
 	<table class="table" align="center" cellspacing="2" border="2">
 	<tr bgcolor="orange">
 <td colspan="8"><center><b>Cart Details</center></td></b>
@@ -21,6 +22,7 @@
 		<td><b>Operations</td></b>
 		
 	</tr>
+	
 	<c:forEach items="${cartlist}" var="cart">
 	<form action="<c:url value='/cart/updatecart'></c:url>">
 	<tr>
@@ -42,9 +44,18 @@
 		<td>Rs:${GrantTotal }/-</td><td></td>
 		</tr>
 		</table>
-		<center><a  href="<c:url value="/payment/${cartId}" />" ><button type="button" class="btn btn-success ">
+		<center><a  href="<c:url value="/payment" />" ><button type="button" class="btn btn-success ">
 				Buy Now
 			</button></a></center>
+			</c:if>
+			
+			<c:if test="${empty cartlist}">
+			<h1>Your cart is empty!!!</h1>
+			</c:if>
+			
+			<a  href="<c:url value="/home" />" ><button type="button" class="btn btn-success ">
+				Continue Shopping
+			</button></a>
 		
 		</div>
 </body>

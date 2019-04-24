@@ -8,7 +8,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a href="<c:url value="/admin/product" />"> Manage Products</a>
-<a href="<c:url value="/admin/category" />"> Manage Categories</a>
+<a href="<c:url value="/admin/product" />" ><button type="button" class="btn btn-success ">Manage Products</button></a>
+<a href="<c:url value="/admin/category" />" ><button type="button" class="btn btn-success ">Manage Categories</button></a>
+
 </body>
 </html>
